@@ -16,3 +16,6 @@ const server = new ApolloServer({
 server.listen(5000).then(({ url }) => {
   console.log(`Apollo Gateway running at ${url}`);
 });
+
+// Start with
+// node ApolloGatewayServer.js
