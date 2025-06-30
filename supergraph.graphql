@@ -1,0 +1,709 @@
+schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/join/v0.3", for: EXECUTION)
+{
+  query: Query
+}
+
+directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
+
+directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+
+directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+"""Information about the offset pagination."""
+type CollectionSegmentInfo
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+{
+  """
+  Indicates whether more items exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+
+  """
+  Indicates whether more items exist prior the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
+}
+
+"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
+scalar DateTime
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+  @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
+
+input DateTimeOperationFilterInput
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+{
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input IntOperationFilterInput
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+{
+  eq: Int
+  neq: Int
+  in: [Int]
+  nin: [Int]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  QUESTIONS @join__graph(name: "questions", url: "http://localhost:8087/graphql")
+  USERS @join__graph(name: "users", url: "http://localhost:8085/graphql")
+}
+
+scalar link__Import
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+input ListFilterInputTypeOfQuestionFilterInput
+  @join__type(graph: QUESTIONS)
+{
+  all: QuestionFilterInput
+  none: QuestionFilterInput
+  some: QuestionFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfRoleFilterInput
+  @join__type(graph: USERS)
+{
+  all: RoleFilterInput
+  none: RoleFilterInput
+  some: RoleFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfTagFilterInput
+  @join__type(graph: QUESTIONS)
+{
+  all: TagFilterInput
+  none: TagFilterInput
+  some: TagFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserFilterInput
+  @join__type(graph: USERS)
+{
+  all: UserFilterInput
+  none: UserFilterInput
+  some: UserFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfViewFilterInput
+  @join__type(graph: QUESTIONS)
+{
+  all: ViewFilterInput
+  none: ViewFilterInput
+  some: ViewFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfVoteFilterInput
+  @join__type(graph: QUESTIONS)
+{
+  all: VoteFilterInput
+  none: VoteFilterInput
+  some: VoteFilterInput
+  any: Boolean
+}
+
+"""
+The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+
+input LongOperationFilterInput
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+{
+  eq: Long
+  neq: Long
+  in: [Long]
+  nin: [Long]
+  gt: Long
+  ngt: Long
+  gte: Long
+  ngte: Long
+  lt: Long
+  nlt: Long
+  lte: Long
+  nlte: Long
+}
+
+"""Information about pagination in a connection."""
+type PageInfo
+  @join__type(graph: QUESTIONS)
+{
+  """
+  Indicates whether more edges exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+
+  """
+  Indicates whether more edges exist prior the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Query
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+{
+  """Returns a list of paginated questions"""
+  questions(
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    where: QuestionFilterInput
+    order: [QuestionSortInput!]
+  ): QuestionsConnection @join__field(graph: QUESTIONS)
+
+  """Returns a question by its id"""
+  question(id: Long!, where: QuestionFilterInput, order: [QuestionSortInput!]): Question @join__field(graph: QUESTIONS)
+
+  """Returns a list of paginated tags"""
+  tags(
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    where: TagFilterInput
+    order: [TagSortInput!]
+  ): TagsConnection @join__field(graph: QUESTIONS)
+
+  """Returns a tag by its id"""
+  tag(id: Long!, where: TagFilterInput, order: [TagSortInput!]): Tag @join__field(graph: QUESTIONS)
+
+  """Returns a list of paginated votes"""
+  votes(skip: Int, take: Int, where: VoteFilterInput, order: [VoteSortInput!]): VotesCollectionSegment @join__field(graph: QUESTIONS)
+
+  """
+  Returns a vote by id of the question that was voted and the user that voted
+  """
+  vote(questionId: Long!, userId: Long!, where: VoteFilterInput, order: [VoteSortInput!]): Vote @join__field(graph: QUESTIONS)
+
+  """Returns a list of paginated views"""
+  views(skip: Int, take: Int, where: ViewFilterInput, order: [ViewSortInput!]): ViewsCollectionSegment @join__field(graph: QUESTIONS)
+
+  """Returns a view by its id"""
+  view(id: Long!, where: ViewFilterInput, order: [ViewSortInput!]): View @join__field(graph: QUESTIONS)
+
+  """Returns a list of paginated users."""
+  users(skip: Int, take: Int, where: UserFilterInput, order: [UserSortInput!]): UsersCollectionSegment @join__field(graph: USERS)
+
+  """Returns a user by its id."""
+  user(id: Long!, where: UserFilterInput, order: [UserSortInput!]): User @join__field(graph: USERS)
+
+  """Returns a list of paginated roles."""
+  roles(skip: Int, take: Int, where: RoleFilterInput, order: [RoleSortInput!]): RolesCollectionSegment @join__field(graph: USERS)
+
+  """Returns a role by its id."""
+  role(id: Long!, where: RoleFilterInput, order: [RoleSortInput!]): Role @join__field(graph: USERS)
+}
+
+"""The question type."""
+type Question
+  @join__type(graph: QUESTIONS, key: "id")
+{
+  """The ID of the question."""
+  id: Long!
+
+  """The tile of the question."""
+  title: String!
+
+  """The body of the question."""
+  body: String!
+
+  """The ID of the author of the question."""
+  userId: Long!
+
+  """The tags of the question."""
+  tags: [Tag!]!
+
+  """The votes of the question."""
+  votes: [Vote!]!
+
+  """Question creation time."""
+  createdAt: DateTime!
+
+  """Question last modification time."""
+  lastModifiedAt: DateTime
+  views: [View!]!
+
+  """The author of the question."""
+  user: User!
+}
+
+input QuestionFilterInput
+  @join__type(graph: QUESTIONS)
+{
+  and: [QuestionFilterInput!]
+  or: [QuestionFilterInput!]
+  title: StringOperationFilterInput
+  body: StringOperationFilterInput
+  userId: LongOperationFilterInput
+  tags: ListFilterInputTypeOfTagFilterInput
+  votes: ListFilterInputTypeOfVoteFilterInput
+  views: ListFilterInputTypeOfViewFilterInput
+  createdAt: DateTimeOperationFilterInput
+  lastModifiedAt: DateTimeOperationFilterInput
+  id: LongOperationFilterInput
+}
+
+"""A connection to a list of items."""
+type QuestionsConnection
+  @join__type(graph: QUESTIONS)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [QuestionsEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [Question!]
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type QuestionsEdge
+  @join__type(graph: QUESTIONS)
+{
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: Question!
+}
+
+input QuestionSortInput
+  @join__type(graph: QUESTIONS)
+{
+  title: SortEnumType
+  body: SortEnumType
+  userId: SortEnumType
+  createdAt: SortEnumType
+  lastModifiedAt: SortEnumType
+  id: SortEnumType
+}
+
+"""The role type."""
+type Role
+  @join__type(graph: USERS)
+{
+  """The ID of the role."""
+  id: Long!
+
+  """The name of the role."""
+  name: String!
+
+  """Users who have the role."""
+  users: [User!]!
+}
+
+input RoleFilterInput
+  @join__type(graph: USERS)
+{
+  and: [RoleFilterInput!]
+  or: [RoleFilterInput!]
+  users: ListFilterInputTypeOfUserFilterInput
+  id: LongOperationFilterInput
+  name: StringOperationFilterInput
+}
+
+"""A segment of a collection."""
+type RolesCollectionSegment
+  @join__type(graph: USERS)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Role!]
+  totalCount: Int!
+}
+
+input RoleSortInput
+  @join__type(graph: USERS)
+{
+  id: SortEnumType
+  name: SortEnumType
+}
+
+enum SortEnumType
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+{
+  ASC @join__enumValue(graph: QUESTIONS) @join__enumValue(graph: USERS)
+  DESC @join__enumValue(graph: QUESTIONS) @join__enumValue(graph: USERS)
+}
+
+input StringOperationFilterInput
+  @join__type(graph: QUESTIONS)
+  @join__type(graph: USERS)
+{
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}
+
+"""The tag type."""
+type Tag
+  @join__type(graph: QUESTIONS)
+{
+  """The ID of the tag."""
+  id: Long!
+
+  """The name of the tag."""
+  name: String!
+
+  """The description of the tag."""
+  description: String!
+
+  """The questions with this tag."""
+  questions: [Question!]!
+}
+
+input TagFilterInput
+  @join__type(graph: QUESTIONS)
+{
+  and: [TagFilterInput!]
+  or: [TagFilterInput!]
+  name: StringOperationFilterInput
+  description: StringOperationFilterInput
+  questions: ListFilterInputTypeOfQuestionFilterInput
+  id: LongOperationFilterInput
+}
+
+"""A connection to a list of items."""
+type TagsConnection
+  @join__type(graph: QUESTIONS)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [TagsEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [Tag!]
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type TagsEdge
+  @join__type(graph: QUESTIONS)
+{
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: Tag!
+}
+
+input TagSortInput
+  @join__type(graph: QUESTIONS)
+{
+  name: SortEnumType
+  description: SortEnumType
+  id: SortEnumType
+}
+
+"""The user type."""
+type User
+  @join__type(graph: QUESTIONS, key: "id")
+  @join__type(graph: USERS, key: "id")
+{
+  """The questions of the user."""
+  questions: [Question!]! @join__field(graph: QUESTIONS)
+
+  """The views of the user."""
+  views: [View!]! @join__field(graph: QUESTIONS)
+
+  """The votes of the user."""
+  votes: [Vote!]! @join__field(graph: QUESTIONS)
+
+  """The ID of the user."""
+  id: Long!
+
+  """The ID of the user in keycloak identity server."""
+  keycloakId: UUID! @join__field(graph: USERS)
+
+  """The name of the user."""
+  username: String! @join__field(graph: USERS)
+
+  """The email address of the user."""
+  email: String! @join__field(graph: USERS)
+
+  """The last login time of the user."""
+  lastLoginAt: DateTime! @join__field(graph: USERS)
+
+  """The reputation of the user."""
+  reputation: Int! @join__field(graph: USERS)
+
+  """The roles of the user."""
+  roles: [Role!]! @join__field(graph: USERS)
+
+  """User creation time."""
+  createdAt: DateTime! @join__field(graph: USERS)
+  reputationEarnedToday: Int! @join__field(graph: USERS)
+}
+
+input UserFilterInput
+  @join__type(graph: USERS)
+{
+  and: [UserFilterInput!]
+  or: [UserFilterInput!]
+  keycloakId: UuidOperationFilterInput
+  username: StringOperationFilterInput
+  email: StringOperationFilterInput
+  lastLoginAt: DateTimeOperationFilterInput
+  reputation: IntOperationFilterInput
+  reputationEarnedToday: IntOperationFilterInput
+  roles: ListFilterInputTypeOfRoleFilterInput
+  createdAt: DateTimeOperationFilterInput
+  id: LongOperationFilterInput
+}
+
+"""A segment of a collection."""
+type UsersCollectionSegment
+  @join__type(graph: USERS)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [User!]
+  totalCount: Int!
+}
+
+input UserSortInput
+  @join__type(graph: USERS)
+{
+  keycloakId: SortEnumType
+  username: SortEnumType
+  email: SortEnumType
+  lastLoginAt: SortEnumType
+  reputation: SortEnumType
+  reputationEarnedToday: SortEnumType
+  createdAt: SortEnumType
+  id: SortEnumType
+}
+
+scalar UUID
+  @join__type(graph: USERS)
+  @specifiedBy(url: "https://tools.ietf.org/html/rfc4122")
+
+input UuidOperationFilterInput
+  @join__type(graph: USERS)
+{
+  eq: UUID
+  neq: UUID
+  in: [UUID]
+  nin: [UUID]
+  gt: UUID
+  ngt: UUID
+  gte: UUID
+  ngte: UUID
+  lt: UUID
+  nlt: UUID
+  lte: UUID
+  nlte: UUID
+}
+
+"""The view type."""
+type View
+  @join__type(graph: QUESTIONS)
+{
+  """The ID of the view."""
+  id: Long!
+
+  """The ID of the question that was viewed."""
+  questionId: Long!
+
+  """The ID of the viewer."""
+  userId: Long
+
+  """The IP address of the viewer."""
+  userIp: String
+
+  """The unique fingerprint of the viewer's device."""
+  userFingerprint: String
+  question: Question!
+
+  """The viewer."""
+  user: User
+}
+
+input ViewFilterInput
+  @join__type(graph: QUESTIONS)
+{
+  and: [ViewFilterInput!]
+  or: [ViewFilterInput!]
+  questionId: LongOperationFilterInput
+  userId: LongOperationFilterInput
+  userIp: StringOperationFilterInput
+  userFingerprint: StringOperationFilterInput
+  question: QuestionFilterInput
+  id: LongOperationFilterInput
+}
+
+"""A segment of a collection."""
+type ViewsCollectionSegment
+  @join__type(graph: QUESTIONS)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [View!]
+  totalCount: Int!
+}
+
+input ViewSortInput
+  @join__type(graph: QUESTIONS)
+{
+  questionId: SortEnumType
+  userId: SortEnumType
+  userIp: SortEnumType
+  userFingerprint: SortEnumType
+  question: QuestionSortInput
+  id: SortEnumType
+}
+
+"""The vote type."""
+type Vote
+  @join__type(graph: QUESTIONS)
+{
+  """The ID of the user that voted."""
+  userId: Long!
+
+  """The ID of the question that was voted."""
+  questionId: Long!
+
+  """The reputation change of the vote."""
+  reputationChange: Int!
+
+  """The question that was voted."""
+  question: Question!
+
+  """The voter."""
+  user: User!
+}
+
+input VoteFilterInput
+  @join__type(graph: QUESTIONS)
+{
+  and: [VoteFilterInput!]
+  or: [VoteFilterInput!]
+  userId: LongOperationFilterInput
+  questionId: LongOperationFilterInput
+  question: QuestionFilterInput
+  reputationChange: IntOperationFilterInput
+}
+
+"""A segment of a collection."""
+type VotesCollectionSegment
+  @join__type(graph: QUESTIONS)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Vote!]
+  totalCount: Int!
+}
+
+input VoteSortInput
+  @join__type(graph: QUESTIONS)
+{
+  userId: SortEnumType
+  questionId: SortEnumType
+  question: QuestionSortInput
+  reputationChange: SortEnumType
+}
