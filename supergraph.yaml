@@ -8,3 +8,7 @@ subgraphs:
     routing_url: http://localhost:8087/graphql
     schema: 
       subgraph_url: http://localhost:8087/graphql
+  answers:
+    routing_url: http://localhost:8089/graphql
+    schema: 
+      subgraph_url: http://localhost:8089/graphql
