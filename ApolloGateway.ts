@@ -39,10 +39,3 @@ async function main() {
 main().catch((err) => {
   console.error('Failed to start gateway', err);
 });
-
-
-// Start with (Powershell):
-// $env:APOLLO_ELV2_LICENSE = "accept"
-// rover supergraph compose --config supergraph.yaml > supergraph.graphql
-// npm install --save-dev typescript ts-node @types/node
-// npm start
